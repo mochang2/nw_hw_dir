@@ -1,3 +1,5 @@
+// https://gitlab.com/gilgil/sns/-/wikis/byte-order/byte-order
+// https://gitlab.com/gilgil/sns/-/wikis/byte-order/report-add-nbo
 #include <stdio.h>
 #include <stdint.h>
 #include <netinet/in.h>
