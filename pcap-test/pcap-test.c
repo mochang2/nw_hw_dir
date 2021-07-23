@@ -75,6 +75,14 @@ void print_dst_mac(struct libnet_ethernet_hdr *L2_hdr){
     printf("\n");
 }
 void print_src_ip(u_int8_t *ip_src_into_8bit_array){
+    // There is a function with which you can easily print IP address, inet_ntoa
+    // The input type of the function is uint32_t, and the output type is char*
+    // If you want to use this function, you must include <sys/socket.h> and <arpa/inet.h>
+    // However, this function has the weakness.
+    // To return char* type, it must not use the pointer of the local variables.
+    // Also, if it uses malloc, there is no space for free.
+    // Therefore, it uses static thread type, but the returned value can be overwritten in some cases.
+    // My mentor recommends using "inet_ntop" as it takes both of src and dst variables.
     printf("src_ip: ");
     for (int i = 0; i < IPv4_BYTE; i++){ // =>function
         if (i == IPv4_BYTE - 1){
