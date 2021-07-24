@@ -44,7 +44,7 @@ bool parse(Param* param, int argc, char* argv[]) {
 }
 
 bool Is_footer(const u_char* packet, u_int ip_size, u_int tcp_size, u_int iph_tcph_tcppayload_size){
-    for (unsigned int i = 0; i <  iph_tcph_tcppayload_size - tcp_size - ip_size - ETHERNET_HEADER_LEN; i++){ // caplen -> totlen
+    for (unsigned int i = 0; i <  iph_tcph_tcppayload_size - tcp_size - ip_size; i++){ // caplen -> totlen
         if (i == ETHERNET_FOOTER_BYTE)
             return true;
         if(packet[i])
@@ -114,7 +114,7 @@ void print_payload_func(bool print_payload, struct payload *L5_to_L7, u_int ip_s
         printf("Payload_data: ");
 
         // ip_hdr->totlen(1 byte unit) - ip_hdr_size - tcp_hdr->offset * 4 : payload length
-        for (unsigned int i = 0; i < iph_tcph_tcppayload_size - tcp_size - ip_size - ETHERNET_HEADER_LEN; i++){ //caplen -> totlen
+        for (unsigned int i = 0; i < iph_tcph_tcppayload_size - tcp_size - ip_size; i++){ //caplen -> totlen
             if(i == 8)
                 break;
 
