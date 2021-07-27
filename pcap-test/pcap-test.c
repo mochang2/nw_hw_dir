@@ -171,12 +171,12 @@ int main(int argc, char* argv[]) {
         bool print_payload;
 
         // capture packets
-		int res = pcap_next_ex(pcap, &header, &packet);
-		if (res == 0) continue;
-		if (res == PCAP_ERROR || res == PCAP_ERROR_BREAK) {
-			printf("pcap_next_ex return %d(%s)\n", res, pcap_geterr(pcap));
-			break;
-		}
+	int res = pcap_next_ex(pcap, &header, &packet);
+	if (res == 0) continue;
+	if (res == PCAP_ERROR || res == PCAP_ERROR_BREAK) {
+		printf("pcap_next_ex return %d(%s)\n", res, pcap_geterr(pcap));
+		break;
+	}
 
         // type cast to distinguish header,
         L2_hdr = (struct libnet_ethernet_hdr*)(packet);
