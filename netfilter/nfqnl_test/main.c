@@ -10,8 +10,10 @@
 #include <string.h>
 #include <libnetfilter_queue/libnetfilter_queue.h>
 
+char *bad_host;
+
 void usage(){
-    printf("usage example: nfqnl_test 0");
+    printf("usage example: nfqnl_test 0 test.gilgil.net");
 }
 
 bool check_len(int len){
@@ -66,7 +68,7 @@ void dump(unsigned char* buf, int size, int *verdict) {
                         printf("%02X ", payload[j]);
                     printf("\nlen is %u in decimal\n", payload_len);
 
-                    if(strstr(payload, "Host: test.gilgil.net"))
+                    if(strstr(payload, bad_host))
                         *verdict = NF_DROP;
                 }
                 //printf("verdict in dump : %d\n", *verdict);
@@ -142,8 +144,10 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
 }
 
 int main(int argc, char **argv) {
-    if (argc != 2)
+    if (argc != 3)
         usage();
+
+    bad_host = argv[2];
 
     struct nfq_handle *h;
     struct nfq_q_handle *qh;
