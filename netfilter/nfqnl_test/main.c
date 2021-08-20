@@ -10,10 +10,33 @@
 #include <string.h>
 #include <libnetfilter_queue/libnetfilter_queue.h>
 
-char *bad_host;
+#define HTTPS_PORT 0x1BB
+#define HTTP_PORT 0x50
+
+unsigned char *bad_host;
 
 void usage(){
     printf("usage example: nfqnl_test 0 test.gilgil.net");
+}
+
+char* strnstr(const char *larger_str, const char* smaller_str, size_t slen){
+    char c, sc;
+    size_t len;
+
+    if ((c = *smaller_str++) != '\0'){
+        len = strlen(smaller_str);
+        do{
+            do{
+                if (slen-- < 1 || (sc = *larger_str++) == '\0')
+                    return NULL;
+            } while(sc != c);
+
+            if (len > slen)
+                return NULL;
+        } while (strncmp(larger_str, smaller_str, len) != 0);
+        larger_str--;
+    }
+    return ((char *)larger_str);
 }
 
 bool check_len(int len){
@@ -59,16 +82,16 @@ void dump(unsigned char* buf, int size, int *verdict) {
 
                 parse(tcp_h, tcp_len, buf, i);
 
-                i += tcp_len;
+                if((i + tcp_len != size) && buf[i+3] == HTTP_PORT){
+                    i += tcp_len;
 
-                if(i != size){
                     payload_len = size - i;
                     payload = buf + i;
                     for (int j = 0; j < payload_len; j++)
                         printf("%02X ", payload[j]);
                     printf("\nlen is %u in decimal\n", payload_len);
 
-                    if(strstr(payload, bad_host))
+                    if(strnstr(payload, bad_host, sizeof(payload))) // have to change the second parameter to hex binary
                         *verdict = NF_DROP;
                 }
                 //printf("verdict in dump : %d\n", *verdict);
