@@ -10,8 +10,8 @@
 #include <string.h>
 #include <libnetfilter_queue/libnetfilter_queue.h>
 
-#define HTTPS_PORT 0x1BB
-#define HTTP_PORT 0x50
+#define HTTPS_PORT 443
+#define HTTP_PORT 80
 
 unsigned char *bad_host;
 
@@ -64,6 +64,7 @@ void dump(unsigned char* buf, int size, int *verdict) {
             // initialize
             unsigned char* ip_h, *tcp_h, *payload;
             uint16_t ip_len, tcp_len, payload_len;
+            unsigned int port;
 
             // ip parse
             ip_len = (buf[i] & 0x0f) * 4;
@@ -82,7 +83,9 @@ void dump(unsigned char* buf, int size, int *verdict) {
 
                 parse(tcp_h, tcp_len, buf, i);
 
-                if((i + tcp_len != size) && buf[i+3] == HTTP_PORT){
+                port = (buf[i + 2] << 8) + buf[i + 3];
+
+                if((i + tcp_len != size) && port == HTTP_PORT){
                     i += tcp_len;
 
                     payload_len = size - i;
