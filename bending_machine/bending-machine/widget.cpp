@@ -80,6 +80,7 @@ void Widget::on_pbReset_clicked()
                  ", 50: " + QString::number(five_ten) +
                  ", 10: " + QString::number(one_ten));
     qbox.exec();
+    changeMoney(money * -1);
 }
 
 
