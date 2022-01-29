@@ -1,0 +1,6 @@
+# ignore .o, Makefile
+/build-*
+
+# user config
+*pro.user
+
