@@ -2,5 +2,5 @@
 /build-*
 
 # user config
-*pro.user
+*.pro.user
 
